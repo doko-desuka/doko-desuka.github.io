@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <title>Test bla</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body>
+    <div class="sample-form">
+        <form id="asdfadsf" method="POST">
+            <fieldset>
+                <script>
+                    var onSuccess = function(response) {
+                        console.log('Success adfasdf 666');
+                        console.log(response);
+                    };
+                </script>
+                <div id="recaptcha-demo" class="g-recaptcha" data-sitekey="6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-" data-callback="onSuccess"></div>
+                <!--<input id="recaptcha-demo-submit" value="Submit" type="submit" style="display: none">-->
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html> 
