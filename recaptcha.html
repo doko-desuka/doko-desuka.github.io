@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <html>
 
 <head>
@@ -8,21 +6,26 @@
     <meta name="viewport" content="width=device-width, user-scalable=yes">
     <title>Openload.co Pair</title>
     <!--<script>window.history.replaceState(null, 'Openload.co Pair', 'https://olpair.com/');</script>-->
-    <script async defer>/* recaptcha/api.js | PLEASE DO NOT COPY AND PASTE THIS CODE. */(function(){var CFG='___grecaptcha_cfg';if(!window[CFG]){window[CFG]={};}var GR='grecaptcha';if(!window[GR]){window[GR]={};}window[GR].ready=window[GR].ready||function(f){(window[CFG]['fns']=window[CFG]['fns']||[]).push(f);};(window[CFG]['render']=window[CFG]['render']||[]).push('onload');window['__google_recaptcha_client']=true;var po=document.createElement('script');po.type='text/javascript';po.async=true;po.src='https://doko-desuka.github.io/recaptcha_en.js';var elem=document.querySelector('script[nonce]');var n=elem&&(elem['nonce']||elem.getAttribute('nonce'));if(n){po.setAttribute('nonce',n);}var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(po, s);})();
-</script>
+    <script>window.origin = 'https://olpair.com';</script>
+    <script async defer>/* recaptcha/api.js | PLEASE DO NOT COPY AND PASTE THIS CODE. */(function(){var CFG='___grecaptcha_cfg';if(!window[CFG]){window[CFG]={};}var GR='grecaptcha';if(!window[GR]){window[GR]={};}window[GR].ready=window[GR].ready||function(f){(window[CFG]['fns']=window[CFG]['fns']||[]).push(f);};(window[CFG]['render']=window[CFG]['render']||[]).push('onload');window['__google_recaptcha_client']=true;var po=document.createElement('script');po.type='text/javascript';po.async=true;po.src='recaptcha_en.js';var elem=document.querySelector('script[nonce]');var n=elem&&(elem['nonce']||elem.getAttribute('nonce'));if(n){po.setAttribute('nonce',n);}var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(po, s);})();
+    </script>
 </head>
 
 <body>
+    <script>window.origin = 'https://olpair.com';</script>
     <div class="sample-form">
         <form id="asdfadsf" method="POST">
             <fieldset>
                 <script>
+                    console.log('MYSCRIPT');
                     var onSuccess = function(response) {
                         console.log('Success adfasdf 666');
                         console.log(response);
                     };
                 </script>
+                <script>window.origin = 'https://olpair.com';</script>
                 <div class="g-recaptcha" data-sitekey="6LckIAQTAAAAAFLTuNjHVDyPq2JQT5qKKFUlQFa3" data-callback="onSuccess"></div>
+                <script>window.origin = 'https://olpair.com';</script>
                 <!--<input id="recaptcha-demo-submit" value="Submit" type="submit" style="display: none">-->
             </fieldset>
         </form>
