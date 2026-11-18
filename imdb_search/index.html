@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!-- By Gemini Flash-Lite, 2026. Thanks a lot robot bro. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>IMDb ID Search</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem 1rem 3rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        h1 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            color: #a1a1aa;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0 0.25rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+            color: #a1a1aa;
+        }
+
+        .filters label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            padding: 0.2rem 0;
+        }
+
+        .filters input[type="radio"] {
+            accent-color: #f4f4f5;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: #121216;
+            border: 1px solid #27272a;
+            color: #f4f4f5;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"]:focus {
+            border-color: #52525b;
+        }
+
+        #results {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .result-item {
+            background: #121216;
+            border: 1px solid #27272a;
+            padding: 0.9rem 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /*
+        .result-item:active {
+            background: #1c1c21;
+            border-color: #3f3f46;
+            transform: scale(0.99);
+        }
+        */
+
+        .result-info {
+            flex: 1;
+            min-width: 0;
+            padding-right: 0.75rem;
+        }
+
+        .result-info h3 {
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 0.2rem;
+            color: #f4f4f5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-info p {
+            font-size: 0.75rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-id {
+            opacity: 0;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            color: #ffffff;
+            background: #052e16;
+            padding: 0.35rem 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #166534;
+            flex-shrink: 0;
+        }
+
+        .result-item.copied .result-id {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IMDb ID Search</h1>
+
+        <!-- Controls & Filters -->
+        <div class="controls">
+            <div class="filters">
+                <label><input type="radio" name="type" value="" checked> Both</label>
+                <label><input type="radio" name="type" value="movie"> Movie</label>
+                <label><input type="radio" name="type" value="series"> TV</label>
+            </div>
+        </div>
+
+        <!-- Search Field -->
+        <input type="text" id="searchInput" placeholder="Search title..." autocomplete="off" autocapitalize="off">
+
+        <!-- Results List -->
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_KEY = '677f5afc';
+        const input = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('results');
+        const radioButtons = document.querySelectorAll('input[name="type"]');
+
+        let debounceTimer;
+
+        async function performSearch() {
+            const query = encodeURIComponent(input.value.trim());
+            const selectedType = document.querySelector('input[name="type"]:checked').value;
+
+            if (!query) {
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            let url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`;
+            if (selectedType) {
+                url += `&type=${selectedType}`;
+            }
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.Response === 'True') {
+                    const items = data.Search.slice(0, 15);
+                    resultsContainer.innerHTML = items.map(item => `
+                        <div class="result-item" onclick="copyId(this, '${item.imdbID}')">
+                            <div class="result-info">
+                                <h3>${item.Title}</h3>
+                                <p>${item.Year} &bull; ${item.Type}</p>
+                            </div>
+                            <span class="result-id">${item.imdbID}</span>
+                        </div>
+                    `).join('');
+                } else {
+                    resultsContainer.innerHTML = `<div style="text-align: center; color: #a1a1aa; font-size: 0.85rem; padding: 2.5rem 0;">No results found</div>`;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function copyId(element, id) {
+            try {
+                await navigator.clipboard.writeText(id);
+                element.classList.add('copied');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+
+        input.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(performSearch, 500);
+        });
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', performSearch);
+        });
+    </script>
+</body>
+</html>
